@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "decimal.js": "^10.6.0",
+    "katex": "^0.17.0",
     "lucide-react": "^0.548.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-helmet-async": "^3.0.0",
+    "react-katex": "^3.1.0",
     "react-router-dom": "^7.18.0"
   },
   "devDependencies": {

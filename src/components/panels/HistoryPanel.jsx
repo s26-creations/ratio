@@ -17,7 +17,7 @@ export function HistoryPanel({
             {/* Header */}
             <div className="glass-panel rounded-2xl p-4 md:p-6 mb-4 md:mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl">
+                    <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl transition-transform duration-300 hover:scale-110">
                         <Clock size={20} />
                     </div>
                     <div>
@@ -28,7 +28,7 @@ export function HistoryPanel({
                 {history.length > 0 && (
                     <button
                         onClick={() => setIsClearModalOpen(true)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/10 dark:hover:bg-red-900/20 text-red-500 rounded-lg transition-colors text-sm font-medium"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/10 dark:hover:bg-red-900/20 text-red-500 rounded-lg transition-all duration-200 text-sm font-medium nav-btn-hover"
                         title="Clear all"
                         aria-label="Clear history"
                     >
@@ -41,7 +41,7 @@ export function HistoryPanel({
             <div className="space-y-4">
                 {history.length === 0 ? (
                     <div className="glass-panel rounded-2xl p-12 text-center text-gray-500 dark:text-gray-400 flex flex-col items-center">
-                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4 animate-empty-float">
                             <Clock size={32} className="opacity-50" />
                         </div>
                         <p className="font-medium text-lg mb-1">No recent conversions</p>
@@ -49,14 +49,15 @@ export function HistoryPanel({
                     </div>
                 ) : (
                     <div className="space-y-3">
-                        {history.map((entry) => (
+                        {history.map((entry, index) => (
                             <div
                                 key={entry.id}
-                                className="group glass-panel rounded-xl p-4 hover:border-blue-200 dark:hover:border-blue-700 transition-all cursor-pointer relative overflow-hidden"
+                                className="animate-list-item group glass-panel rounded-xl p-4 hover:border-blue-200 dark:hover:border-blue-700 transition-all duration-300 cursor-pointer relative overflow-hidden hover:-translate-y-0.5 hover:shadow-lg"
+                                style={{ animationDelay: `${index * 50}ms` }}
                                 onClick={() => onSelectEntry(entry)}
                             >
                                 <div className="flex items-center justify-between mb-2">
-                                    <span className="text-[10px] uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-full">
+                                    <span className="text-[10px] uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-0.5 rounded-full transition-colors duration-200">
                                         {entry.category}
                                     </span>
                                     <span className="text-[10px] text-gray-500 dark:text-gray-400 font-mono">
@@ -71,7 +72,7 @@ export function HistoryPanel({
                                             <span className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[40px] md:max-w-[50px]">{entry.from.symbol}</span>
                                         </div>
                                     </div>
-                                    <ArrowRight size={16} className="text-gray-400 dark:text-gray-500 flex-shrink-0" />
+                                    <ArrowRight size={16} className="text-gray-400 dark:text-gray-500 flex-shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" />
                                     <div className="flex-1 min-w-0 text-right">
                                         <div className="flex items-baseline gap-1 justify-end">
                                             <span className="font-mono text-base md:text-lg font-bold truncate">{entry.to.value}</span>
@@ -85,7 +86,7 @@ export function HistoryPanel({
                                         e.stopPropagation();
                                         onDeleteEntry(entry.id);
                                     }}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-100 dark:hover:bg-red-900/40 shadow-sm"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-100 dark:hover:bg-red-900/40 shadow-sm nav-btn-hover"
                                     title="Delete entry"
                                     aria-label="Delete entry"
                                 >

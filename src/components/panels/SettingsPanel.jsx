@@ -17,30 +17,32 @@ export function SettingsPanel({
                     <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Settings</h2>
                     <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">Customize your experience</p>
                 </div>
-                <Button onClick={onClose} variant="secondary" className="md:hidden">
+                <Button onClick={onClose} variant="secondary" className="md:hidden nav-btn-hover">
                     Done
                 </Button>
             </div>
 
             <div className="space-y-6">
                 {/* Appearance Section */}
-                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                <div className="glass-panel rounded-2xl p-4 md:p-6 animate-list-item stagger-1">
                     <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">Appearance</h3>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className={`p-2 rounded-xl ${darkMode ? 'bg-amber-500/10 text-amber-500' : 'bg-slate-100 text-slate-600'}`}>
-                                {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            <div className={`p-2 rounded-xl transition-all duration-500 ${darkMode ? 'bg-amber-500/10 text-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.15)]' : 'bg-slate-100 text-slate-600'}`}>
+                                <div className="transition-transform duration-500" style={{ transform: darkMode ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                                    {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+                                </div>
                             </div>
                             <div>
                                 <p className="font-medium text-gray-900 dark:text-white">Theme</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
                                     {darkMode ? 'Dark Mode' : 'Light Mode'}
                                 </p>
                             </div>
                         </div>
                         <button
                             onClick={toggleDarkMode}
-                            className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-colors ${darkMode
+                            className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 nav-btn-hover ${darkMode
                                 ? 'bg-gray-700 text-white hover:bg-gray-600'
                                 : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                                 }`}
@@ -51,14 +53,14 @@ export function SettingsPanel({
                 </div>
 
                 {/* Calculation Section */}
-                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                <div className="glass-panel rounded-2xl p-4 md:p-6 animate-list-item stagger-2">
                     <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-3 md:mb-4">Calculation</h3>
                     <div className="mb-4">
                         <div className="flex items-center justify-between mb-2">
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Decimal Precision
                             </label>
-                            <span className="font-mono text-sm bg-gray-100 dark:bg-gray-700 rounded px-2 py-0.5">
+                            <span className="font-mono text-sm bg-gray-100 dark:bg-gray-700 rounded px-2 py-0.5 transition-all duration-200">
                                 {decimals}
                             </span>
                         </div>
@@ -69,7 +71,7 @@ export function SettingsPanel({
                             max="20"
                             value={decimals}
                             onChange={(e) => setDecimals(parseInt(e.target.value))}
-                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600 transition-all duration-200"
                         />
                         <p className="text-xs text-gray-500 mt-2">
                             Controls the maximum number of decimal places in the result.
@@ -78,9 +80,9 @@ export function SettingsPanel({
                 </div>
 
                 {/* Info / About Section */}
-                <div className="glass-panel rounded-2xl p-4 md:p-6 overflow-hidden">
+                <div className="glass-panel rounded-2xl p-4 md:p-6 overflow-hidden animate-list-item stagger-3">
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 transition-transform duration-300 hover:scale-110 hover:rotate-3">
                             <span className="text-xl font-bold">R</span>
                         </div>
                         <div>
@@ -102,27 +104,31 @@ export function SettingsPanel({
                                 icon={<Zap className="text-amber-500" />}
                                 title="Lightning Fast"
                                 description="Instant conversions with zero latency."
+                                delay={0}
                             />
                             <FeatureCard
                                 icon={<Shield className="text-blue-500" />}
                                 title="Scientific Precision"
                                 description="Built on decimal.js for zero errors."
+                                delay={1}
                             />
                             <FeatureCard
                                 icon={<Globe className="text-green-500" />}
                                 title="Universal Support"
                                 description="Over 40 categories and 260+ units."
+                                delay={2}
                             />
                             <FeatureCard
                                 icon={<Table2 className="text-purple-500" />}
                                 title="Batch Converter"
                                 description="Convert multiple values instantly."
+                                delay={3}
                             />
                         </div>
 
 
 
-                        <div className="p-4 bg-gray-50 dark:bg-gray-800/30 rounded-xl text-center">
+                        <div className="p-4 bg-gray-50 dark:bg-gray-800/30 rounded-xl text-center transition-colors duration-300">
                             <p className="text-xs text-gray-400 dark:text-gray-500">
                                 © {new Date().getFullYear()} Ratio. Crafted with precision.
                             </p>
@@ -131,12 +137,12 @@ export function SettingsPanel({
                 </div>
 
                 {/* Developer Note Section */}
-                <div className="glass-panel rounded-2xl p-4 md:p-6">
+                <div className="glass-panel rounded-2xl p-4 md:p-6 animate-list-item stagger-4">
                     <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-3 md:mb-4 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                        <span className="w-2 h-2 rounded-full bg-blue-500 notification-dot"></span>
                         Note from the Developer
                     </h3>
-                    <div className="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-5 border border-blue-100 dark:border-blue-800/30">
+                    <div className="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-5 border border-blue-100 dark:border-blue-800/30 transition-colors duration-300">
                         <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 italic">
                             "I built this app after identifying a gap I experienced firsthand as a student: the need for a converter that is scientifically precise yet also clean, intuitive, and visually refined. This app is the result of that goal. If you have any questions or suggestions, feel free to reach out."
                         </p>
@@ -144,7 +150,7 @@ export function SettingsPanel({
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                             <a
                                 href="mailto:santi.studiox@gmail.com"
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium text-sm shadow-lg shadow-blue-500/20"
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all duration-300 font-medium text-sm shadow-lg shadow-blue-500/20 nav-btn-hover hover:shadow-blue-500/30"
                             >
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -162,10 +168,13 @@ export function SettingsPanel({
     );
 }
 
-function FeatureCard({ icon, title, description }) {
+function FeatureCard({ icon, title, description, delay = 0 }) {
     return (
-        <div className="p-3 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 shadow-sm">
-            <div className="mb-2 w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center">
+        <div
+            className="animate-list-item p-3 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700/50 shadow-sm feature-card-hover hover:border-gray-200 dark:hover:border-gray-600/50 group"
+            style={{ animationDelay: `${300 + delay * 80}ms` }}
+        >
+            <div className="mb-2 w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                 {icon}
             </div>
             <h4 className="font-bold text-gray-900 dark:text-white text-sm mb-0.5">{title}</h4>

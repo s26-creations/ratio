@@ -62,17 +62,17 @@ export function ConfirmModal({
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            {/* Backdrop */}
+            {/* Backdrop with animated blur */}
             <div 
-                className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity"
+                className="absolute inset-0 bg-gray-900/40 animate-backdrop"
                 onClick={onClose}
                 aria-hidden="true"
             />
             
-            {/* Modal */}
+            {/* Modal with bounce entrance */}
             <div 
                 ref={modalRef}
-                className="relative w-full max-w-sm glass-panel bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-2xl p-6 animate-scale-in"
+                className="relative w-full max-w-sm glass-panel bg-white/90 dark:bg-gray-900/90 rounded-2xl shadow-2xl p-6 animate-modal-bounce"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="modal-title"
@@ -80,7 +80,7 @@ export function ConfirmModal({
                 <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
                         {isDestructive && (
-                            <div className="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl">
+                            <div className="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-xl animate-alert-shake">
                                 <AlertTriangle size={20} />
                             </div>
                         )}
@@ -90,14 +90,14 @@ export function ConfirmModal({
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg transition-colors"
+                        className="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg transition-all duration-200 nav-btn-hover focus-glow"
                         aria-label="Close dialog"
                     >
                         <X size={16} />
                     </button>
                 </div>
                 
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                     {message}
                 </p>
                 
@@ -106,13 +106,13 @@ export function ConfirmModal({
                         variant="secondary" 
                         onClick={onClose}
                         data-cancel-btn="true"
-                        className="px-4 py-2"
+                        className="px-4 py-2 nav-btn-hover"
                     >
                         {cancelText}
                     </Button>
                     <Button 
                         variant={isDestructive ? 'primary' : 'primary'}
-                        className={`px-4 py-2 ${isDestructive ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white shadow-red-500/25' : ''}`}
+                        className={`px-4 py-2 nav-btn-hover ${isDestructive ? 'bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white shadow-red-500/25' : ''}`}
                         onClick={() => {
                             onConfirm();
                             onClose();

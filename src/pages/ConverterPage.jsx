@@ -14,6 +14,7 @@ import FormulaBreakdown from '../components/converter/FormulaBreakdown.jsx';
 import QuickReferenceTable from '../components/converter/QuickReferenceTable.jsx';
 import PopularConversions from '../components/converter/PopularConversions.jsx';
 import { Star } from 'lucide-react';
+import BrandDivider from '../components/layout/BrandDivider.jsx';
 
 export function ConverterPage() {
     const {
@@ -31,6 +32,7 @@ export function ConverterPage() {
         setFromUnit,
         setToUnit,
         setInputValue,
+        setConversion,
         swapUnits,
         copied,
         handleCopy
@@ -55,13 +57,8 @@ export function ConverterPage() {
         const [urlFrom, urlTo] = unitsParam.split('-to-');
         if (!urlFrom || !urlTo) return;
 
-        // Only update state if it differs from the URL to avoid loops
-        // React 18 batches these synchronously
-        if (category !== categoryParam) setCategory(categoryParam);
-        if (fromUnit !== urlFrom) setFromUnit(urlFrom);
-        if (toUnit !== urlTo) setToUnit(urlTo);
-        
-    }, [categoryParam, unitsParam, category, fromUnit, toUnit, setCategory, setFromUnit, setToUnit, location.pathname]);
+        setConversion(categoryParam, urlFrom, urlTo);
+    }, [categoryParam, unitsParam, setConversion]);
 
     // Sync State -> URL
     useEffect(() => {
@@ -87,7 +84,7 @@ export function ConverterPage() {
     };
 
     return (
-        <div className="w-full max-w-2xl animate-slide-up">
+        <div className="w-full animate-slide-up">
             <Helmet>
                 <title>{title}</title>
                 <meta name="description" content={description} />
@@ -100,18 +97,19 @@ export function ConverterPage() {
                 <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
             </Helmet>
 
-            {/* Category Selector - Mobile Only */}
-            <div className="mb-6 md:mb-12 flex justify-center md:hidden relative z-50">
-                <div className="w-full max-w-xs glass-panel rounded-2xl p-1">
-                    <CategorySelector
-                        categories={categories}
-                        selectedCategory={category}
-                        onSelectCategory={setCategory}
-                    />
+            <div className="max-w-2xl mx-auto">
+                {/* Category Selector - Mobile Only */}
+                <div className="mb-6 md:mb-12 flex justify-center md:hidden relative z-50">
+                    <div className="w-full max-w-xs glass-panel rounded-2xl p-1">
+                        <CategorySelector
+                            categories={categories}
+                            selectedCategory={category}
+                            onSelectCategory={setCategory}
+                        />
+                    </div>
                 </div>
-            </div>
 
-            <div className="space-y-2 sm:space-y-4 md:space-y-8">
+                <div className="space-y-2 sm:space-y-4 md:space-y-8">
                 {/* FROM Section */}
                 <div className="relative group">
                     <label htmlFor="value-input-from" className="block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2 ml-1">
@@ -184,9 +182,12 @@ export function ConverterPage() {
                     </div>
                 </div>
             </div>
+            </div>
+
+            <BrandDivider />
 
             {/* === Contextual Content Sections === */}
-            <div className="mt-12 md:mt-24 space-y-4 sm:space-y-6 md:space-y-8">
+            <div className="max-w-5xl mx-auto mt-8 md:mt-16 w-full">
 
                 {/* Section 1: Formula Breakdown */}
                 <FormulaBreakdown
@@ -213,11 +214,7 @@ export function ConverterPage() {
                 {/* Section 3: Popular Conversions */}
                 <PopularConversions
                     onSelectConversion={(cat, from, to) => {
-                        setCategory(cat);
-                        setTimeout(() => {
-                            setFromUnit(from);
-                            setToUnit(to);
-                        }, 0);
+                        setConversion(cat, from, to);
                     }}
                 />
 

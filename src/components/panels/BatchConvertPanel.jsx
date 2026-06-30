@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, Copy, FileText, ArrowRight, Table2 } from 'lucide-react';
+import { X, Copy, FileText, ArrowRight, Table2, Check } from 'lucide-react';
 import Converter from '../../engine/core/converter.js';
 import { formatValue } from '../../engine/utils/formatters.js';
 import { getDefaultUnits } from '../../constants/categoryDefaults.js';
@@ -106,7 +106,7 @@ export function BatchConvertPanel({
             {/* Header */}
             <div className="flex items-center justify-between mb-6 px-2 shrink-0">
                 <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl">
+                    <div className="p-2.5 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-xl transition-transform duration-300 hover:scale-110">
                         <Table2 size={22} />
                     </div>
                     <div>
@@ -123,7 +123,7 @@ export function BatchConvertPanel({
                 <div className="flex flex-col gap-4">
 
                     {/* Controls Panel */}
-                    <div className="glass-panel rounded-2xl p-4 md:p-6 space-y-4">
+                    <div className="glass-panel rounded-2xl p-4 md:p-6 space-y-4 animate-list-item stagger-1">
                         <div className="flex items-center justify-between">
                             <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Category</label>
                         </div>
@@ -136,7 +136,7 @@ export function BatchConvertPanel({
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 relative">
                             {/* Arrow indicator - desktop only */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-600 pointer-events-none z-10 hidden sm:block">
-                                <ArrowRight size={16} />
+                                <ArrowRight size={16} className="transition-transform duration-300" />
                             </div>
 
                             <div>
@@ -159,7 +159,7 @@ export function BatchConvertPanel({
                     </div>
 
                     {/* Input Panel */}
-                    <div className="glass-panel rounded-2xl p-4 md:p-6 flex flex-col">
+                    <div className="glass-panel rounded-2xl p-4 md:p-6 flex flex-col animate-list-item stagger-2">
                         <div className="flex justify-between items-center mb-3">
                             <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Input Values
@@ -171,19 +171,19 @@ export function BatchConvertPanel({
                         <textarea
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="e.g.&#10;10&#10;25.5&#10;100"
-                            className="w-full min-h-[200px] p-4 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-gray-800/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-base font-mono transition-shadow duration-200"
+                            placeholder={"e.g.\n10\n25.5\n100"}
+                            className="w-full min-h-[200px] p-4 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-gray-800/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-y text-base font-mono transition-all duration-300 focus:shadow-[0_0_20px_rgba(168,85,247,0.1)]"
                             autoFocus
                         />
                     </div>
                 </div>
 
                 {/* Results Column */}
-                <div className="glass-panel rounded-2xl overflow-hidden flex flex-col min-h-[250px] md:min-h-0">
+                <div className="glass-panel rounded-2xl overflow-hidden flex flex-col min-h-[250px] md:min-h-0 animate-list-item stagger-3">
                     <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-white/50 dark:bg-gray-900/20 backdrop-blur-sm">
                         <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                             <span>Results</span>
-                            <span className="bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-full text-[10px]">
+                            <span className="bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-2 py-0.5 rounded-full text-[10px] transition-all duration-300">
                                 {results.length}
                             </span>
                         </label>
@@ -191,10 +191,10 @@ export function BatchConvertPanel({
                         {results.length > 0 && (
                             <button
                                 onClick={handleCopy}
-                                className="flex items-center gap-1.5 text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors uppercase tracking-wide bg-purple-50 dark:bg-purple-900/20 px-3 py-1.5 rounded-lg"
+                                className={`flex items-center gap-1.5 text-xs font-bold text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-all duration-200 uppercase tracking-wide bg-purple-50 dark:bg-purple-900/20 px-3 py-1.5 rounded-lg nav-btn-hover ${copied ? 'animate-copy-success' : ''}`}
                             >
                                 {copied ? (
-                                    <>Copied!</>
+                                    <><Check size={14} className="animate-check-bounce" /> Copied!</>
                                 ) : (
                                     <>
                                         <Copy size={14} />
@@ -208,7 +208,7 @@ export function BatchConvertPanel({
                     <div className="flex-1 overflow-y-auto custom-scrollbar bg-white/30 dark:bg-gray-900/10">
                         {results.length === 0 ? (
                             <div className="h-full flex flex-col items-center justify-center text-gray-400 text-center p-6 py-12">
-                                <div className="w-14 h-14 rounded-full bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center mb-3">
+                                <div className="w-14 h-14 rounded-full bg-gray-50 dark:bg-gray-800/50 flex items-center justify-center mb-3 animate-empty-float">
                                     <FileText size={22} className="opacity-40" />
                                 </div>
                                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">No results yet</p>
@@ -224,11 +224,15 @@ export function BatchConvertPanel({
                                 </thead>
                                 <tbody className="divide-y divide-gray-100 dark:divide-gray-800/50">
                                     {results.map((r, i) => (
-                                        <tr key={i} className="group hover:bg-purple-50/50 dark:hover:bg-purple-900/10 transition-colors duration-150">
+                                        <tr
+                                            key={i}
+                                            className="animate-batch-row group hover:bg-purple-50/50 dark:hover:bg-purple-900/10 transition-colors duration-200"
+                                            style={{ animationDelay: `${i * 40}ms` }}
+                                        >
                                             <td className="px-6 py-3 font-mono text-gray-600 dark:text-gray-400">
                                                 {r.input}
                                             </td>
-                                            <td className={`px-6 py-3 font-mono font-medium ${r.error ? 'text-red-500' : 'text-gray-900 dark:text-gray-200'}`}>
+                                            <td className={`px-6 py-3 font-mono font-medium transition-colors duration-200 ${r.error ? 'text-red-500' : 'text-gray-900 dark:text-gray-200'}`}>
                                                 {r.output}
                                             </td>
                                         </tr>

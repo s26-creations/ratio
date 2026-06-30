@@ -156,6 +156,7 @@ export function getConversionInfo(fromUnit, toUnit, category) {
         return {
             type: 'identity',
             formulaText: `1 ${fromSymbol} = 1 ${toSymbol}`,
+            latexFormula: `1 \\text{ ${fromSymbol}} = 1 \\text{ ${toSymbol}}`,
             stepsText: 'Same unit — no conversion needed',
             fromSymbol,
             toSymbol,
@@ -166,12 +167,36 @@ export function getConversionInfo(fromUnit, toUnit, category) {
     // Affine (temperature)
     if (categoryDef.affine) {
         const tempFormulas = {
-            'celsius-fahrenheit': { formula: '(°C × 9/5) + 32 = °F', steps: 'Multiply by 9/5, then add 32' },
-            'fahrenheit-celsius': { formula: '(°F − 32) × 5/9 = °C', steps: 'Subtract 32, then multiply by 5/9' },
-            'celsius-kelvin': { formula: '°C + 273.15 = K', steps: 'Add 273.15' },
-            'kelvin-celsius': { formula: 'K − 273.15 = °C', steps: 'Subtract 273.15' },
-            'fahrenheit-kelvin': { formula: '(°F + 459.67) × 5/9 = K', steps: 'Add 459.67, then multiply by 5/9' },
-            'kelvin-fahrenheit': { formula: '(K × 9/5) − 459.67 = °F', steps: 'Multiply by 9/5, then subtract 459.67' }
+            'celsius-fahrenheit': { 
+                formula: '(°C × 9/5) + 32 = °F', 
+                steps: 'Multiply by 9/5, then add 32',
+                latex: `(^{\\circ}\\text{C} \\times \\frac{9}{5}) + 32 = ^{\\circ}\\text{F}`
+            },
+            'fahrenheit-celsius': { 
+                formula: '(°F − 32) × 5/9 = °C', 
+                steps: 'Subtract 32, then multiply by 5/9',
+                latex: `(^{\\circ}\\text{F} - 32) \\times \\frac{5}{9} = ^{\\circ}\\text{C}`
+            },
+            'celsius-kelvin': { 
+                formula: '°C + 273.15 = K', 
+                steps: 'Add 273.15',
+                latex: `^{\\circ}\\text{C} + 273.15 = \\text{K}`
+            },
+            'kelvin-celsius': { 
+                formula: 'K − 273.15 = °C', 
+                steps: 'Subtract 273.15',
+                latex: `\\text{K} - 273.15 = ^{\\circ}\\text{C}`
+            },
+            'fahrenheit-kelvin': { 
+                formula: '(°F + 459.67) × 5/9 = K', 
+                steps: 'Add 459.67, then multiply by 5/9',
+                latex: `(^{\\circ}\\text{F} + 459.67) \\times \\frac{5}{9} = \\text{K}`
+            },
+            'kelvin-fahrenheit': { 
+                formula: '(K × 9/5) − 459.67 = °F', 
+                steps: 'Multiply by 9/5, then subtract 459.67',
+                latex: `(\\text{K} \\times \\frac{9}{5}) - 459.67 = ^{\\circ}\\text{F}`
+            }
         };
 
         const key = `${fromUnit}-${toUnit}`;
@@ -180,6 +205,7 @@ export function getConversionInfo(fromUnit, toUnit, category) {
         return {
             type: 'affine',
             formulaText: formulaData ? formulaData.formula : `${fromSymbol} → ${toSymbol} (affine transform)`,
+            latexFormula: formulaData ? formulaData.latex : `\\text{${fromSymbol}} \\rightarrow \\text{${toSymbol}} \\quad (\\text{affine transform})`,
             stepsText: formulaData ? formulaData.steps : 'Multi-step conversion through base unit',
             fromSymbol,
             toSymbol,
@@ -192,6 +218,7 @@ export function getConversionInfo(fromUnit, toUnit, category) {
         return {
             type: 'logarithmic',
             formulaText: `${fromSymbol} ↔ ${toSymbol} (logarithmic scale)`,
+            latexFormula: `\\text{${fromSymbol}} \\leftrightarrow \\text{${toSymbol}} \\quad (\\text{logarithmic scale})`,
             stepsText: 'Convert through base unit using logarithmic transform',
             fromSymbol,
             toSymbol,
@@ -206,6 +233,7 @@ export function getConversionInfo(fromUnit, toUnit, category) {
 
     // Determine a clean display of the factor
     const factorDisplay = formatFactorForDisplay(directFactor);
+    const latexFactorDisplay = factorDisplay.replace(/e([+-]?\d+)/, ' \\times 10^{$1}');
 
     // Build the operation description
     let operation, stepsText;
@@ -224,6 +252,7 @@ export function getConversionInfo(fromUnit, toUnit, category) {
         factorDisplay,
         operation,
         formulaText: `1 ${fromSymbol} = ${factorDisplay} ${toSymbol}`,
+        latexFormula: `1 \\text{ ${fromSymbol}} = ${latexFactorDisplay} \\text{ ${toSymbol}}`,
         stepsText,
         fromSymbol,
         toSymbol

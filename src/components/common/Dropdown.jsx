@@ -112,15 +112,15 @@ export function Dropdown({
                 aria-haspopup="listbox"
                 aria-label={label || placeholder}
                 onClick={() => setIsOpen(!isOpen)}
-                className="group w-full px-4 py-3 rounded-2xl flex items-center justify-between transition-all duration-200 active:scale-[0.98]
+                className="group w-full px-4 py-3 rounded-2xl flex items-center justify-between transition-all duration-300 active:scale-[0.98] transition-spring
                    bg-gray-100/50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10
                    backdrop-blur-sm border border-transparent hover:border-gray-200 dark:hover:border-white/10
-                   text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500"
+                   text-gray-900 dark:text-white focus:outline-none focus-glow"
             >
                 <span className="flex items-center gap-3 truncate">
                     {selectedOption ? (
                         <>
-                            {selectedOption.icon && <span className="text-xl" aria-hidden="true">{selectedOption.icon}</span>}
+                            {selectedOption.icon && <span className="text-xl transition-transform duration-300 group-hover:scale-110" aria-hidden="true">{selectedOption.icon}</span>}
                             <span className="font-semibold">{selectedOption.label}</span>
                             {selectedOption.subLabel && (
                                 <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">
@@ -132,7 +132,10 @@ export function Dropdown({
                         <span className="text-gray-400">{placeholder}</span>
                     )}
                 </span>
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
+                <ChevronDown
+                    className={`w-4 h-4 text-gray-400 transition-all duration-300 ${isOpen ? 'rotate-180 text-blue-500 dark:text-indigo-400' : ''}`}
+                    aria-hidden="true"
+                />
             </button>
 
             {isOpen && (
@@ -154,7 +157,7 @@ export function Dropdown({
                                     onChange={(e) => setSearch(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2 bg-transparent rounded-lg text-base font-medium
                              text-gray-900 dark:text-white placeholder-gray-400
-                             focus:outline-none focus:bg-gray-50 dark:focus:bg-white/5 transition-colors"
+                             focus:outline-none focus:bg-gray-50 dark:focus:bg-white/5 transition-colors duration-300"
                                 />
                             </div>
                         </div>
@@ -166,7 +169,7 @@ export function Dropdown({
                         className="overflow-y-auto max-h-64 no-scrollbar p-1"
                     >
                         {filteredOptions.length > 0 ? (
-                            filteredOptions.map((opt) => (
+                            filteredOptions.map((opt, index) => (
                                 <button
                                     key={opt.key}
                                     role="option"
@@ -177,25 +180,26 @@ export function Dropdown({
                                         onChange(opt.key);
                                         closeDropdown();
                                     }}
-                                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 active:scale-[0.98] focus:outline-none focus:bg-blue-50 focus:dark:bg-indigo-500/20
+                                    className={`animate-option-cascade w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 active:scale-[0.98] focus:outline-none focus:bg-blue-50 focus:dark:bg-indigo-500/20
                     ${value === opt.key
                                             ? 'bg-blue-50 dark:bg-indigo-500/20 text-blue-600 dark:text-indigo-300'
                                             : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5'
                                         }`}
+                                    style={{ animationDelay: `${index * 30}ms` }}
                                 >
-                                    {opt.icon && <span className="text-lg" aria-hidden="true">{opt.icon}</span>}
+                                    {opt.icon && <span className="text-lg transition-transform duration-200 hover:scale-110" aria-hidden="true">{opt.icon}</span>}
                                     <div className="flex-1 min-w-0">
                                         <div className="font-medium truncate">
                                             {opt.label}
                                         </div>
                                         {opt.subLabel && (
-                                            <div className={`text-xs truncate ${value === opt.key ? 'text-blue-400 dark:text-indigo-300' : 'text-gray-400'}`}>
+                                            <div className={`text-xs truncate transition-colors duration-200 ${value === opt.key ? 'text-blue-400 dark:text-indigo-300' : 'text-gray-400'}`}>
                                                 {opt.subLabel}
                                             </div>
                                         )}
                                     </div>
                                     {value === opt.key && (
-                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-indigo-400"></div>
+                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-indigo-400 animate-check-bounce"></div>
                                     )}
                                 </button>
                             ))

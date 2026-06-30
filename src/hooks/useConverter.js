@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Converter from '../engine/core/converter.js';
 import { isValidNumberFormat } from '../engine/utils/validators.js';
 import { formatValue } from '../engine/utils/formatters.js';
@@ -27,26 +27,32 @@ export function useConverter() {
         }
     }, [category, setCategory]);
 
-    // Initialize units when category changes
-    useEffect(() => {
-        // Check if current units are valid for new category
-        const categoryDef = Converter.definitions[category];
+    // Safe category setter that updates units synchronously if needed
+    const handleSetCategory = useCallback((newCategory) => {
+        if (newCategory === category) return;
+        
+        const categoryDef = Converter.definitions[newCategory];
         if (!categoryDef) return;
 
-        const units = categoryDef.units;
-        const fromExists = units[fromUnit];
-        const toExists = units[toUnit];
+        const fromExists = categoryDef.units[fromUnit];
+        const toExists = categoryDef.units[toUnit];
 
-        // If both units exist in new category and are different, keep them
-        if (fromExists && toExists && fromUnit !== toUnit) {
-            return;
+        setCategory(newCategory);
+
+        // If current units don't exist in new category, update them in the same batch
+        if (!(fromExists && toExists && fromUnit !== toUnit)) {
+            const defaults = getDefaultUnits(newCategory);
+            setFromUnit(defaults.from);
+            setToUnit(defaults.to);
         }
+    }, [category, fromUnit, toUnit, setCategory]);
 
-        // Otherwise, set smart defaults
-        const defaults = getDefaultUnits(category);
-        setFromUnit(defaults.from);
-        setToUnit(defaults.to);
-    }, [category, fromUnit, toUnit]);
+    // Batch setter for all three to prevent intermediate renders
+    const setConversion = useCallback((newCategory, newFrom, newTo) => {
+        setCategory(newCategory);
+        setFromUnit(newFrom);
+        setToUnit(newTo);
+    }, [setCategory]);
 
     // Perform conversion when inputs change
     useEffect(() => {
@@ -84,14 +90,14 @@ export function useConverter() {
     }, [inputValue, fromUnit, toUnit, category, decimals]);
 
     // Actions
-    const swapUnits = () => {
+    const swapUnits = useCallback(() => {
         setFromUnit(toUnit);
         setToUnit(fromUnit);
         // Optional: set input to result to chain conversions
         if (result && !error) {
             setInputValue(result);
         }
-    };
+    }, [fromUnit, toUnit, result, error]);
 
     // Memoized lists
     const categories = useMemo(() => Converter.getCategories(), []);
@@ -125,10 +131,11 @@ export function useConverter() {
         toUnitSymbol,
 
         // Setters
-        setCategory,
+        setCategory: handleSetCategory,
         setFromUnit,
         setToUnit,
         setInputValue,
+        setConversion,
 
         // Actions
         swapUnits
