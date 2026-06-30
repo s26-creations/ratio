@@ -66,7 +66,7 @@ State is handled via a series of lightweight Context Providers (`ConverterContex
 
 ## 🤝 Contributing (Adding New Units)
 
-Adding a new unit or category to Ratio is incredibly simple thanks to the decoupled engine.
+Adding a new unit or category to Ratio is incredibly simple thanks to the amazing decoupled engine.
 
 1. **Create or edit a domain file** inside `src/engine/definitions/` (e.g., `mechanics.js`).
 2. **Define the category** with a base unit and optionally an affine or logarithmic flag.
