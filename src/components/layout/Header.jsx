@@ -33,9 +33,6 @@ export function Header({
                     <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-none tracking-wider group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-all duration-300 animate-text-reveal">
                         RATIO
                     </h1>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium tracking-wide hidden sm:block transition-colors duration-300">
-                        The Most Precise (and Beautiful) Unit Converter
-                    </p>
                 </div>
             </div>
 
