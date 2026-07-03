@@ -49,9 +49,29 @@ export function useConverter() {
 
     // Batch setter for all three to prevent intermediate renders
     const setConversion = useCallback((newCategory, newFrom, newTo) => {
+        const categoryDef = Converter.definitions[newCategory];
+        
+        if (!categoryDef) {
+            setCategory('length');
+            const defaults = getDefaultUnits('length');
+            setFromUnit(defaults.from);
+            setToUnit(defaults.to);
+            return;
+        }
+
+        const fromExists = categoryDef.units[newFrom];
+        const toExists = categoryDef.units[newTo];
+
         setCategory(newCategory);
-        setFromUnit(newFrom);
-        setToUnit(newTo);
+        
+        if (fromExists && toExists) {
+            setFromUnit(newFrom);
+            setToUnit(newTo);
+        } else {
+            const defaults = getDefaultUnits(newCategory);
+            setFromUnit(defaults.from);
+            setToUnit(defaults.to);
+        }
     }, [setCategory]);
 
     // Perform conversion when inputs change
